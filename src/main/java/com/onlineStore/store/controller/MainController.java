@@ -1,4 +1,4 @@
-package com.onlineStore.store;
+package com.onlineStore.store.controller;
 
 import com.onlineStore.store.domain.Message;
 import com.onlineStore.store.repos.MessageRepo;
@@ -17,7 +17,7 @@ public class MainController {
     @Autowired
     private MessageRepo messageRepo;
 
-    @GetMapping
+    @GetMapping("/main")
     public String main(Map<String, Object> model) {
         Iterable<Message> messages = messageRepo.findAll();
 
@@ -25,7 +25,7 @@ public class MainController {
         return "main";
     }
 
-    @PostMapping
+    @PostMapping("/main")
     public String add(
             @RequestParam(name="text", required=true, defaultValue="")
                     String text,
