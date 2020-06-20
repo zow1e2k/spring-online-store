@@ -11,14 +11,14 @@
         </form>
     </div>
     <div>
-        <form method="post">
+        <form th:action="@{/main}" method="post">
             <input type="text" name="text" />
             <input type="text" name="tag" />
             <button type="submit">Добавить</button>
         </form>
     </div>
     <div>
-        <form method="post" action="filter">
+        <form method="post" th:action="@{/filter}">
             <input type="text" name="filter" />
             <button type="submit">Найти</button>
         </form>
@@ -28,11 +28,13 @@
             <th>ID</th>
             <th>TAG</th>
             <th>TEXT</th>
+            <th>Author</th>
         </tr>
         <tr th:each="msg : ${messages}">
             <td th:text="${msg.id}"></td>
             <td th:text="${msg.tag}"></td>
             <td th:text="${msg.text}"></td>
+            <td th:text="${msg.getAuthorname()}"></td>
         </tr>
     </table>
 </body>

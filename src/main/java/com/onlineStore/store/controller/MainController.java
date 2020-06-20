@@ -11,32 +11,29 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.Map;
-
 @Controller
 public class MainController {
     @Autowired
     private MessageRepo messageRepo;
 
     @GetMapping("/main")
-    public String main(Map<String, Object> model, @AuthenticationPrincipal User user) {
+    public String main(Model model) {
         Iterable<Message> messages = messageRepo.findAll();
-        System.out.println(user != null ? user.getUsername() : "NULL");
-        model.put("messages", messages);
+        model.addAttribute("messages", messages);
         return "main";
     }
 
     @PostMapping("/main")
     public String add(
-            @RequestParam(name="tag", required=true, defaultValue="")
-                    String tag,
             @RequestParam(name="text", required=true, defaultValue="")
                     String text,
+            @RequestParam(name="tag", required=true, defaultValue="")
+                    String tag,
             Model model,
             @AuthenticationPrincipal User user)
     {
         System.out.println(user != null ? user.getUsername() : "NULL");
-        Message msg = new Message(tag, text);
+        Message msg = new Message(tag, text, user);
         messageRepo.save(msg);
 
         Iterable<Message> messages = messageRepo.findAll();
@@ -44,11 +41,11 @@ public class MainController {
         return "main";
     }
 
-    @PostMapping("filter")
+    @PostMapping("/filter")
     public String filter(
             @RequestParam(name="filter", required=true, defaultValue="")
                     String filter,
-            Map<String, Object> model)
+            Model model)
     {
         Iterable<Message> messages;
 
@@ -58,7 +55,7 @@ public class MainController {
             messages = messageRepo.findAll();
         }
 
-        model.put("messages", messages);
+        model.addAttribute("messages", messages);
         return "main";
     }
 
