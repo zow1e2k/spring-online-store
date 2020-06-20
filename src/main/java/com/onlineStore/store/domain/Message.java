@@ -1,22 +1,19 @@
 package com.onlineStore.store.domain;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
-    private String text;
     private String tag;
+    private String text;
 
     public Message() { }
 
-    public Message(String text, String tag) {
-        this.text = text;
+    public Message(String tag, String text) {
         this.tag = tag;
+        this.text = text;
     }
 
     public void setText(String text) {
