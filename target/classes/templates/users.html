@@ -1,0 +1,19 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <div th:each="user : ${users}">
+        <form th:action="@{/profile/editor/} + ${user.getId()}" method="post">
+            <strong th:text="${user.getId()}"></strong>
+            <strong th:text="${user.getUsername()}"></strong>
+            <strong th:each="role, iterStat : ${user.getRoles()}">
+                <strong th:text="${iterStat.last} ? ${role} + '.' : ${role} + ','"></strong>
+            </strong>
+            <button type="submit">Edit</button>
+        </form>
+    </div>
+</body>
+</html>
