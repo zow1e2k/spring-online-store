@@ -1,40 +1,27 @@
 package com.onlineStore.store.domain;
-
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
-public class Message {
+public class ReplyMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String text;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "product_id")
-    private Product product;
-
-    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 
-    @Transient
-    private List<ReplyMessage> replies;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "mainMessage_id")
+    private Message mainMessage;
 
-    public Message() { }
+    public ReplyMessage() { }
 
-    public Message(String text, User user, Product product) {
+    public ReplyMessage(String text, User user, Message msg) {
         this.text = text;
         this.author = user;
-        this.product = product;
-    }
-
-    public List<ReplyMessage> getReplies() {
-        return replies;
-    }
-
-    public void setReplies(List<ReplyMessage> replies) {
-        this.replies = replies;
+        this.mainMessage = msg;
     }
 
     public void setText(String text) {
@@ -43,6 +30,14 @@ public class Message {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public Message getMainMessage() {
+        return mainMessage;
+    }
+
+    public void setMainMessage(Message mainMessage) {
+        this.mainMessage = mainMessage;
     }
 
     public String getText() {
@@ -55,14 +50,6 @@ public class Message {
 
     public User getAuthor() {
         return author;
-    }
-
-    public Product getProduct() {
-        return product;
-    }
-
-    public void setProduct(Product product) {
-        this.product = product;
     }
 
     public void setAuthor(User author) {

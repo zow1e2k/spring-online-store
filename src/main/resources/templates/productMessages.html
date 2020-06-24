@@ -1,0 +1,31 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div>
+        <div>
+            <strong>ID</strong>
+            <strong>TAG</strong>
+            <strong>TEXT</strong>
+            <strong>Author</strong>
+        </div>
+        <form th:action="@{/products/comment/} + ${product.getId()}" method="post">
+            <button type="submit">Оставить отзыв</button>
+        </form>
+
+        <form th:each="msg : ${messages}" th:action="@{/products/reply/} + ${msg.getId()}" method="post">
+            <strong th:text="${msg.id}"></strong>
+            <strong th:text="${msg.text}"></strong>
+            <div th:each="replies : ${msg.getReplies()}">
+                <strong th:text="${replies.id}"></strong>
+                <strong th:text="${replies.text}"></strong>
+            </div>
+            <button type="submit">Ответить</button>
+        </form>
+    </div>
+</body>
+</html>

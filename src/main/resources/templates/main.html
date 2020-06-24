@@ -3,6 +3,7 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
     <div>
@@ -11,10 +12,11 @@
         </form>
     </div>
     <div>
-        <form th:action="@{/main}" method="post">
+        <form th:action="@{/main}" method="post" enctype="multipart/form-data">
             <input type="text" name="text" />
             <input type="text" name="tag" />
-            <button type="submit">Добавить</button>
+            <input type="file" name="file"/>
+            <button type="submit" >Добавить</button>
         </form>
     </div>
     <div>
@@ -23,19 +25,20 @@
             <button type="submit">Найти</button>
         </form>
     </div>
-    <table>
-        <tr>
-            <th>ID</th>
-            <th>TAG</th>
-            <th>TEXT</th>
-            <th>Author</th>
-        </tr>
-        <tr th:each="msg : ${messages}">
-            <td th:text="${msg.id}"></td>
-            <td th:text="${msg.tag}"></td>
-            <td th:text="${msg.text}"></td>
-            <td th:text="${msg.getAuthorname()}"></td>
-        </tr>
-    </table>
+    <div>
+        <div>
+            <strong>ID</strong>
+            <strong>TAG</strong>
+            <strong>TEXT</strong>
+            <strong>Author</strong>
+        </div>
+        <div th:each="msg : ${messages}">
+            <strong th:text="${msg.id}"></strong>
+            <strong th:text="${msg.tag}"></strong>
+            <strong th:text="${msg.text}"></strong>
+            <img th:if="${msg.filename}" th:src="@{/imgs/} + ${msg.filename}" width="20%" height="20%"></img>
+            <strong th:text="${msg.getAuthorname()}"></strong>
+        </div>
+    </div>
 </body>
 </html>

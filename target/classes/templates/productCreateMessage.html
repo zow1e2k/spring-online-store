@@ -1,0 +1,16 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div>
+        <form th:action="@{/products/addComment/} + ${product.getId()}" method="post">
+            <input type="text" name="comment" value="Введите сообщение отзыва"/>
+            <button type="submit" >Отправить</button>
+        </form>
+    </div>
+</body>
+</html>

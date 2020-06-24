@@ -1,0 +1,51 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+    <div>
+        <form method="post" th:action="@{/products/filter}">
+            <select name="filterByTag" value="Фильтр по названию">
+                <option text="Не выбрано" selected="true"></option>
+                <div th:each="tag : ${tags}" >
+                    <option th:text="${tag}"></option>
+                </div>
+            </select>
+            <select name="filterByCarModel" value="Фильтр по модели авто">
+                <option text="Не выбрано" selected="true"></option>
+                <div th:each="carModel : ${carModels}" >
+                    <option th:text="${carModel}"></option>
+                </div>
+            </select>
+            <button type="submit">Найти</button>
+        </form>
+    </div>
+    <div>
+        <div>
+            <strong>ID</strong>
+            <strong>CAR MODEL</strong>
+            <strong>TAG</strong>
+            <strong>TEXT</strong>
+            <strong>PRICE</strong>
+        </div>
+        <strong th:text="${text}"></strong>
+        <form th:each="prod : ${products}" th:action="@{/products/} + ${prod.getId()}" method="post">
+            <strong th:text="${prod.id}"></strong>
+            <strong th:text="${prod.carModel}"></strong>
+            <strong th:text="${prod.tag}"></strong>
+            <strong th:text="${prod.text}"></strong>
+            <strong th:text="${prod.price}"></strong>
+            <img th:if="${prod.filename}" th:src="@{/imgs/} + ${prod.filename}" width="20%" height="20%"/>
+            <button type="submit">Отзывы о товаре</button>
+        </form>
+    </div>
+</body>
+</html>
