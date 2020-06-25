@@ -37,15 +37,22 @@
             <strong>PRICE</strong>
         </div>
         <strong th:text="${text}"></strong>
-        <form th:each="prod : ${products}" th:action="@{/products/} + ${prod.getId()}" method="post">
-            <strong th:text="${prod.id}"></strong>
-            <strong th:text="${prod.carModel}"></strong>
-            <strong th:text="${prod.tag}"></strong>
-            <strong th:text="${prod.text}"></strong>
-            <strong th:text="${prod.price}"></strong>
-            <img th:if="${prod.filename}" th:src="@{/imgs/} + ${prod.filename}" width="20%" height="20%"/>
-            <button type="submit">Отзывы о товаре</button>
-        </form>
+        <div th:each="prod : ${products}">
+
+            <form th:action="@{/products/} + ${prod.getId()}" method="post">
+                <strong th:text="${prod.id}"></strong>
+                <strong th:text="${prod.carModel}"></strong>
+                <strong th:text="${prod.tag}"></strong>
+                <strong th:text="${prod.text}"></strong>
+                <img th:if="${prod.filename}" th:src="@{/imgs/} + ${prod.filename}" width="20%" height="20%"/>
+                <button type="submit">Отзывы о товаре</button>
+            </form>
+
+            <form th:action="@{/products/basket/} + ${prod.getId()}" method="post">
+                <h1 th:text="${prod.price}"></h1>
+                <button type="submit">Положить в корзину</button>
+            </form>
+        </div>
     </div>
 </body>
 </html>

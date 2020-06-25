@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <div>
+        <form th:action="@{/logout}" method="post">
+            <input type="submit" value="Sign Out"/>
+        </form>
+    </div>
+    <div>
+        <div>
+            <strong>ID</strong>
+            <strong>CAR MODEL</strong>
+            <strong>TAG</strong>
+            <strong>TEXT</strong>
+            <strong>PRICE</strong>
+        </div>
+        <div th:each="prod : ${products}">
+
+            <form th:action="@{/products/buy/} + ${prod.getId()}" method="post">
+                <strong th:text="${prod.id}"></strong>
+                <strong th:text="${prod.carModel}"></strong>
+                <strong th:text="${prod.tag}"></strong>
+                <strong th:text="${prod.text}"></strong>
+                <h1 th:text="${prod.price}"></h1>
+                <img th:if="${prod.filename}" th:src="@{/imgs/} + ${prod.filename}" width="20%" height="20%"/>
+                <button type="submit">Купить</button>
+            </form>
+
+        </div>
+    </div>
+</body>
+</html>

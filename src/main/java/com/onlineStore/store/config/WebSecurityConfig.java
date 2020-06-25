@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 import javax.sql.DataSource;
 
@@ -32,7 +33,15 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/registration", "/static/**", "/products/**").permitAll()
+                    .antMatchers(
+                            "/",
+                            "/registration",
+                            "/static/**",
+                            "/products",
+                            "/imgs/**",
+                            "/products/filter",
+                            "/products/{product}")
+                    .permitAll()
                     .anyRequest().authenticated()
                 .and()
                     .formLogin()
@@ -40,7 +49,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .and()
                     .logout()
-                    .permitAll();
+                    .permitAll()
+                .and()
+                    .exceptionHandling().accessDeniedPage("/accessDenied.html")
+                .and()
+                    .exceptionHandling().accessDeniedHandler(accessDeniedHandler());
     }
 
     @Override
@@ -51,5 +64,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public AccessDeniedHandler accessDeniedHandler(){
+        return new CustomAccessDeniedHandler();
     }
 }

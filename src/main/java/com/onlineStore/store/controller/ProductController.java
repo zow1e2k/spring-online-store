@@ -1,14 +1,13 @@
 package com.onlineStore.store.controller;
 
-import com.onlineStore.store.domain.Message;
-import com.onlineStore.store.domain.Product;
-import com.onlineStore.store.domain.ReplyMessage;
-import com.onlineStore.store.domain.User;
-import com.onlineStore.store.repos.MessageRepo;
-import com.onlineStore.store.repos.ProductRepo;
-import com.onlineStore.store.repos.ReplyMessageRepo;
+import ch.qos.logback.core.db.dialect.SQLDialectCode;
+import com.onlineStore.store.domain.*;
+import com.onlineStore.store.repos.*;
+import org.hibernate.hql.internal.ast.tree.SqlNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.core.SqlReturnType;
+import org.springframework.jdbc.support.SqlValue;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -18,9 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.sql.*;
+import java.util.*;
 
 @Controller
 @RequestMapping("/products")
@@ -33,6 +31,12 @@ public class ProductController {
 
     @Autowired
     private ReplyMessageRepo replyMessageRepo;
+
+    @Autowired
+    private ProductsBasketRepo productsBasketRepo;
+
+    @Autowired
+    private UserRepo userRepo;
 
     @Value("${upload.path}")
     private String uploadPath;
@@ -168,6 +172,65 @@ public class ProductController {
 
         return "redirect:/products";
     }
+
+    @PostMapping("/basket/{product}")
+    public String addToBasket(
+            @PathVariable String product,
+            @AuthenticationPrincipal User user,
+            Model model
+    ) {
+        Integer id = Integer.parseInt(product);
+        ProductsBasket prodBasket = new ProductsBasket(productRepo.findByIntegerId(id), user.getBasket());
+
+        productsBasketRepo.save(prodBasket);
+
+        Iterable<Product> products = productRepo.findAll();
+        model.addAttribute("products", products);
+
+        return "products";
+    }
+
+    @GetMapping("/basket")
+    public String basket(
+            @AuthenticationPrincipal User user,
+            Model model
+    ) {
+        Basket basket = user.getBasket();
+        Iterable<ProductsBasket> productsBasket = productsBasketRepo.findPBByBasketId(basket.getId());
+        List<Product> products = new ArrayList<>();
+
+        for (ProductsBasket pb : productsBasket) {
+            products.add(pb.getProduct());
+        }
+
+        model.addAttribute("products", products);
+
+        return "basket";
+    }
+
+    @PostMapping("/buy/{product}")
+    public String buy(
+            @PathVariable String product,
+            @AuthenticationPrincipal User user,
+            Model model
+    ) {
+        Integer productId = Integer.parseInt(product);
+        Long basketId = user.getBasket().getId();
+        productsBasketRepo.deleteProductFromBasket(basketId, productId);
+
+        Iterable<ProductsBasket> productsBasket = productsBasketRepo.findPBByBasketId(basketId);
+        List<Product> products = new ArrayList<>();
+
+        for (ProductsBasket pb : productsBasket) {
+            products.add(pb.getProduct());
+        }
+
+        model.addAttribute("products", products);
+
+        return "basket";
+    }
+
+
 
     @PostMapping("/addComment/{product}")
     public String addComment(

@@ -15,8 +15,12 @@
     <artifactId>store</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+
     <properties>
         <java.version>1.8</java.version>
+        <http use-expressions="true">
+            <access-denied-handler error-page="/accessDenied"/>
+        </http>
     </properties>
 
     <dependencies>

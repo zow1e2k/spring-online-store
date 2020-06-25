@@ -11,4 +11,9 @@ public class RootController {
         return "root";
     }
 
+    @GetMapping("/accessDenied")
+    public String accessDenied() {
+        return "accessDenied";
+    }
+
 }

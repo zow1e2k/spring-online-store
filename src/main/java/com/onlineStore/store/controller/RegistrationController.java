@@ -1,7 +1,9 @@
 package com.onlineStore.store.controller;
 
+import com.onlineStore.store.domain.Basket;
 import com.onlineStore.store.domain.Role;
 import com.onlineStore.store.domain.User;
+import com.onlineStore.store.repos.BasketRepo;
 import com.onlineStore.store.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,6 +18,9 @@ import java.util.Map;
 public class RegistrationController {
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private BasketRepo basketRepo;
 
     @GetMapping("/registration")
     public String registration() {
@@ -37,6 +42,9 @@ public class RegistrationController {
         user.setPassword(hashedPassword);
         user.setOnline(true);
         user.setRoles(Collections.singleton(Role.USER));
+        Basket basket = new Basket();
+        user.setBasket(basket);
+        basketRepo.save(basket);
         userRepo.save(user);
 
         return "redirect:/login";
