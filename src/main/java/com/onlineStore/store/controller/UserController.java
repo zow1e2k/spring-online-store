@@ -21,11 +21,16 @@ public class UserController {
     @Autowired
     private UserRepo userRepo;
 
-    @GetMapping("/you")
+    @GetMapping("/{user}")
     public String profile(
             Model model,
+            @PathVariable User userPath,
             @AuthenticationPrincipal User user
     ) {
+        if (userPath.equals(user)) {
+            return "/root";
+        }
+
         model.addAttribute("username", user.getUsername());
         model.addAttribute("access", user.getRoles());
         return "profile";

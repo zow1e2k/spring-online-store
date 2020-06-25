@@ -3,55 +3,112 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <div>
-        <form th:action="@{/logout}" method="post">
-            <input type="submit" value="Sign Out"/>
-        </form>
-    </div>
-    <div>
-        <form method="post" th:action="@{/products/filter}">
-            <select name="filterByTag" value="Фильтр по названию">
-                <option text="Не выбрано" selected="true"></option>
-                <div th:each="tag : ${tags}" >
-                    <option th:text="${tag}"></option>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <strong class="navbar-brand" th:if="${username}" th:text="${username}"></strong>
+        <strong class="navbar-brand" th:if="${username == null}">Гость</strong>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <div th:if="${username == null}">
+                    <li class="nav-item">
+                        <form th:action="@{/login}" method="get">
+                            <input type="submit" value="Войти" class="btn btn-success btn-lg ml-2"/>
+                        </form>
+                    </li>
                 </div>
-            </select>
-            <select name="filterByCarModel" value="Фильтр по модели авто">
-                <option text="Не выбрано" selected="true"></option>
-                <div th:each="carModel : ${carModels}" >
-                    <option th:text="${carModel}"></option>
+
+                <div th:if="${username}">
+                    <li class="nav-item">
+                        <form th:action="@{/logout}" method="post">
+                            <input type="submit" value="Выйти" class="btn btn-danger btn-lg ml-2"/>
+                        </form>
+                    </li>
                 </div>
-            </select>
-            <button type="submit">Найти</button>
-        </form>
-    </div>
-    <div>
+
+                <div th:if="${username == null}">
+                    <li class="nav-item">
+                        <form th:action="@{/registration}" method="get">
+                            <input class="nav-link ml-2" type="submit" value="Создать профиль"/>
+                        </form>
+                    </li>
+                </div>
+
+                <div>
+                    <li class="nav-item">
+                        <form th:action="@{/products}" method="get">
+                            <input class="nav-link ml-2" type="submit" value="Товары"/>
+                        </form>
+                    </li>
+                </div>
+
+                <div>
+                    <li class="nav-item">
+                        <form th:action="@{/products/basket}" th:if="${username}" method="get">
+                            <input class="nav-link ml-2" type="submit" value="Корзина"/>
+                        </form>
+                    </li>
+                </div>
+                <div>
+                    <li class="nav-item" th:if="${admin}">
+                        <form th:action="@{/products/create}" method="get">
+                            <input class="nav-link ml-2" type="submit" value="Добавить товар"/>
+                        </form>
+                    </li>
+                </div>
+            </ul>
+        </div>
+    </nav>
+    <div class="container mt-5">
         <div>
-            <strong>ID</strong>
-            <strong>CAR MODEL</strong>
-            <strong>TAG</strong>
-            <strong>TEXT</strong>
-            <strong>PRICE</strong>
+            <form method="post" th:action="@{/products/filter}">
+                <select name="filterByTag">
+                    <option text="Не выбрано" selected="true"></option>
+                    <div th:each="tag : ${tags}" >
+                        <option th:text="${tag}"></option>
+                    </div>
+                </select>
+                <select name="filterByCarModel">
+                    <option text="Не выбрано" selected="true"></option>
+                    <div th:each="carModel : ${carModels}" >
+                        <option th:text="${carModel}"></option>
+                    </div>
+                </select>
+                <button type="submit">Найти</button>
+            </form>
         </div>
         <strong th:text="${text}"></strong>
-        <div th:each="prod : ${products}">
+        <div class="card-group w-25 p-3" th:each="prod : ${products}">
+            <div class="card">
+                <div class="card-body" >
+                    <img th:if="${prod.filename}" th:src="@{/imgs/} + ${prod.filename}" class="card-img-top rounded-circle"/>
 
-            <form th:action="@{/products/} + ${prod.getId()}" method="post">
-                <strong th:text="${prod.id}"></strong>
-                <strong th:text="${prod.carModel}"></strong>
-                <strong th:text="${prod.tag}"></strong>
-                <strong th:text="${prod.text}"></strong>
-                <img th:if="${prod.filename}" th:src="@{/imgs/} + ${prod.filename}" width="20%" height="20%"/>
-                <button type="submit">Отзывы о товаре</button>
-            </form>
+                    <form  th:action="@{/products/} + ${prod.getId()}" method="post">
+                        <h5 class="card-title" th:text="${prod.carModel}"></h5>
+                        <h5 class="card-title" th:text="${prod.tag}"></h5>
+                        <div class="card-text" th:text="${prod.text}"></div>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Отзывы о товаре</button>
+                    </form>
 
-            <form th:action="@{/products/basket/} + ${prod.getId()}" method="post">
-                <h1 th:text="${prod.price}"></h1>
-                <button type="submit">Положить в корзину</button>
-            </form>
+                    <h1 th:text="${prod.price}"></h1>
+
+                    <form  th:action="@{/products/basket/} + ${prod.getId()}" method="post">
+                        <button type="submit" th:if="${username}" class="btn btn-success btn-lg btn-block">Положить в корзину</button>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </body>

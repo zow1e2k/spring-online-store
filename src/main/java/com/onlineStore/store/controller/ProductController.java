@@ -1,13 +1,9 @@
 package com.onlineStore.store.controller;
 
-import ch.qos.logback.core.db.dialect.SQLDialectCode;
 import com.onlineStore.store.domain.*;
 import com.onlineStore.store.repos.*;
-import org.hibernate.hql.internal.ast.tree.SqlNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.jdbc.core.SqlReturnType;
-import org.springframework.jdbc.support.SqlValue;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
@@ -17,8 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/products")
@@ -42,7 +39,7 @@ public class ProductController {
     private String uploadPath;
 
     @GetMapping("")
-    public String products(Model model) {
+    public String products(Model model, @AuthenticationPrincipal User user) {
         Iterable<Product> prod = productRepo.findAll();
         Iterable<String> tags = productRepo.findAllTags();
         Iterable<String> carModels = productRepo.findAllCarModels();
@@ -50,6 +47,14 @@ public class ProductController {
         model.addAttribute("tags", tags);
         model.addAttribute("carModels", carModels);
         model.addAttribute("products", prod);
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
         return "products";
     }
 
