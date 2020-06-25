@@ -8,11 +8,11 @@ import com.onlineStore.store.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Collections;
-import java.util.Map;
 
 @Controller
 public class RegistrationController {
@@ -28,11 +28,11 @@ public class RegistrationController {
     }
 
     @PostMapping("/registration")
-    public String addUser(User user, Map<String, Object> model) {
+    public String addUser(User user, Model model) {
         User userDB = userRepo.findByUsername(user.getUsername());
 
         if (userDB != null) {
-            model.put("message", "User already exist");
+            model.addAttribute("message", "Пользователь уже существует");
             return "registration";
         }
 
@@ -46,6 +46,14 @@ public class RegistrationController {
         user.setBasket(basket);
         basketRepo.save(basket);
         userRepo.save(user);
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
 
         return "redirect:/login";
     }

@@ -60,7 +60,15 @@ public class ProductController {
 
     @GetMapping("/create")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String create() {
+    public String create(@AuthenticationPrincipal User user, Model model) {
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
         return "productCreate";
     }
 
@@ -76,7 +84,9 @@ public class ProductController {
             @RequestParam("file")
                     MultipartFile file,
             @RequestParam(name="price", required=true, defaultValue="")
-                    float price
+                    float price,
+            @AuthenticationPrincipal User user,
+            Model model
     ) throws IOException {
 
         Product product = new Product(tag, carModel, text, price);
@@ -98,6 +108,14 @@ public class ProductController {
 
         productRepo.save(product);
 
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "redirect:/products";
     }
 
@@ -107,6 +125,7 @@ public class ProductController {
                     String tag,
             @RequestParam(name="filterByCarModel", required=true, defaultValue="")
                     String carModel,
+            @AuthenticationPrincipal User user,
             Model model)
     {
         Iterable<Product> products;
@@ -134,28 +153,55 @@ public class ProductController {
         model.addAttribute("text", text);
         model.addAttribute("products", products);
 
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "products";
     }
 
     @PostMapping("/comment/{product}")
     public String comment(
             @PathVariable String product,
+            @AuthenticationPrincipal User user,
             Model model
     ) {
         Integer id = Integer.parseInt(product);
 
         model.addAttribute("product", productRepo.findByIntegerId(id));
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
         return "productCreateMessage";
     }
 
     @PostMapping("/reply/{message}")
     public String reply(
             @PathVariable String message,
+            @AuthenticationPrincipal User user,
             Model model
     ) {
         Integer id = Integer.parseInt(message);
 
         model.addAttribute("message", messageRepo.findByIntegerId(id));
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "productCreateReplyMessage";
     }
 
@@ -175,6 +221,14 @@ public class ProductController {
         Iterable<Product> products = productRepo.findAll();
         model.addAttribute("products", products);
 
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "redirect:/products";
     }
 
@@ -192,7 +246,15 @@ public class ProductController {
         Iterable<Product> products = productRepo.findAll();
         model.addAttribute("products", products);
 
-        return "products";
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
+        return "redirect:/products";
     }
 
     @GetMapping("/basket")
@@ -209,6 +271,14 @@ public class ProductController {
         }
 
         model.addAttribute("products", products);
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
 
         return "basket";
     }
@@ -232,7 +302,15 @@ public class ProductController {
 
         model.addAttribute("products", products);
 
-        return "basket";
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
+        return "redirect:/products/basket";
     }
 
 
@@ -253,13 +331,22 @@ public class ProductController {
         Iterable<Message> messages = messageRepo.findAll();
         model.addAttribute("messages", messages);
 
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "redirect:/products";
     }
 
     @PostMapping("/{product}")
     public String get(
             Model model,
-            @PathVariable String product
+            @PathVariable String product,
+            @AuthenticationPrincipal User user
     ) {
         Integer id = Integer.parseInt(product);
         Iterable<Message> messages = messageRepo.findForProduct(id);
@@ -272,6 +359,15 @@ public class ProductController {
 
         model.addAttribute("product", productRepo.findByIntegerId(id));
         model.addAttribute("messages", messages);
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "productMessages";
     }
 }

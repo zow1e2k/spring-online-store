@@ -24,25 +24,31 @@ public class UserController {
     @GetMapping("/{user}")
     public String profile(
             Model model,
-            @PathVariable User userPath,
-            @AuthenticationPrincipal User user
+            @PathVariable String user,
+            @AuthenticationPrincipal User user1
     ) {
-        if (userPath.equals(user)) {
-            return "/root";
+        model.addAttribute("user", userRepo.findByUsername(user));
+
+        if (user != null) {
+            model.addAttribute("username", user1.getUsername());
+
+            if (user1.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
         }
 
-        model.addAttribute("username", user.getUsername());
-        model.addAttribute("access", user.getRoles());
-        return "profile";
+        return "user";
     }
 
 
     @GetMapping("/editor")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String users(
-        Model model
-    )
-    {
+            @AuthenticationPrincipal User user,
+            Model model) {
+
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("admin", true);
         model.addAttribute("users", userRepo.findAll());
         return "users";
     }
@@ -54,6 +60,8 @@ public class UserController {
         @PathVariable User user,
         Model model
     ) {
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("admin", true);
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         return "userEdit";
@@ -65,8 +73,8 @@ public class UserController {
             @RequestParam String username,
             @RequestParam Map<String, String> form,
             @PathVariable User user,
-        Model model
-    ) {
+        Model model) {
+
         user.setUsername(username);
         Set<String> roles = Arrays.stream(Role.values()).map(Role::name).collect(Collectors.toSet());
 
@@ -78,6 +86,9 @@ public class UserController {
             }
         }
         userRepo.save(user);
+
+        model.addAttribute("username", user.getUsername());
+        model.addAttribute("admin", true);
 
         return "redirect:/profile/editor";
     }

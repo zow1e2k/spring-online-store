@@ -65,9 +65,11 @@
     </div>
 </nav>
 <div class="container mt-5">
-    <form th:action="@{/products/addComment/} + ${product.getId()}" method="post">
-        <input type="text" name="comment" value="Введите сообщение отзыва"/>
-        <button type="submit" class="btn btn-success btn-lg btn-block">Отправить отзыв</button>
+    <form>
+        <strong th:text="${user.getUsername()}"></strong>
+        <strong th:each="role, iterStat : ${user.getRoles()}">
+            <strong th:text="${iterStat.last} ? ${role} + '.' : ${role} + ','"></strong>
+        </strong>
     </form>
 </div>
 </body>

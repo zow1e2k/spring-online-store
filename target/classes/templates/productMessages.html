@@ -12,7 +12,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <strong class="navbar-brand" th:if="${username}" th:text="${username}"></strong>
+    <a th:href="@{/profile/} + ${username}" class="navbar-brand" th:if="${username}" th:text="${username}"></a>
     <strong class="navbar-brand" th:if="${username == null}">Гость</strong>
 
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -64,25 +64,22 @@
     </div>
 </nav>
 <div class="container mt-5">
-    <div>
-        <strong>TAG</strong>
-        <strong>TEXT</strong>
-        <strong>Author</strong>
-    </div>
-    <form th:action="@{/products/comment/} + ${product.getId()}" method="post">
-        <button type="submit">Оставить отзыв</button>
-    </form>
 
-    <div class="card" style="width: 18rem;">
+    <div class="card col-md-3 col-xl-3 mb-lg-2 mb-3 mt-3">
         <form th:each="msg : ${messages}" th:action="@{/products/reply/} + ${msg.getId()}" method="post">
-            <strong th:text="${msg.text}"></strong>
+            <h2 class="font-weight-bold" th:text="${msg.text}"></h2>
+            <a th:href="@{/profile/} + ${msg.getAuthor().getUsername()}" th:text="'@' + ${msg.getAuthor().getUsername()}"></a>
             <div th:each="replies : ${msg.getReplies()}">
-                <strong th:text="${replies.id}"></strong>
-                <strong th:text="${replies.text}"></strong>
+                <h5 class="font-weight-bold" th:text="${replies.text}"></h5>
+                <a th:href="@{/profile/} + ${replies.getAuthor().getUsername()}" th:text="'@' + ${replies.getAuthor().getUsername()}"></a>
             </div>
-            <button type="submit">Ответить</button>
+            <button type="submit" class="btn btn-primary btn-lg btn-block">Ответить на отзыв</button>
         </form>
     </div>
+
+    <form th:action="@{/products/comment/} + ${product.getId()}" method="post">
+        <button type="submit" class="btn btn-success btn-lg btn-block mb-3 mt-3">Оставить отзыв</button>
+    </form>
 </div>
 </body>
 </html>

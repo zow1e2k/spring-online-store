@@ -3,14 +3,72 @@
 <head>
     <title>Getting Started: Serving Web Content</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/style.css">
 </head>
 <body>
-    <div>
-        <form th:action="@{/products/createReply/} + ${message.getId()}" method="post">
-            <input type="text" name="reply" value="Введите комментарий"/>
-            <button type="submit" >Отправить</button>
-        </form>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a th:href="@{/profile/} + ${username}" class="navbar-brand" th:if="${username}" th:text="${username}"></a>
+    <strong class="navbar-brand" th:if="${username == null}">Гость</strong>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <div th:if="${username == null}">
+                <li class="nav-item">
+                    <form th:action="@{/login}" method="get">
+                        <input type="submit" value="Войти" class="btn btn-success btn-lg ml-2"/>
+                    </form>
+                </li>
+            </div>
+
+            <div th:if="${username}">
+                <li class="nav-item">
+                    <form th:action="@{/logout}" method="post">
+                        <input type="submit" value="Выйти" class="btn btn-danger btn-lg ml-2"/>
+                    </form>
+                </li>
+            </div>
+
+            <div th:if="${username == null}">
+                <li class="nav-item">
+                    <form th:action="@{/registration}" method="get">
+                        <input class="nav-link ml-2" type="submit" value="Создать профиль"/>
+                    </form>
+                </li>
+            </div>
+
+            <div>
+                <li class="nav-item">
+                    <form th:action="@{/products}" method="get">
+                        <input class="nav-link ml-2" type="submit" value="Товары"/>
+                    </form>
+                </li>
+            </div>
+
+            <div>
+                <li class="nav-item">
+                    <form th:action="@{/products/basket}" th:if="${username}" method="get">
+                        <input class="nav-link ml-2" type="submit" value="Корзина"/>
+                    </form>
+                </li>
+            </div>
+        </ul>
     </div>
+</nav>
+<div class="container mt-5">
+    <form th:action="@{/products/createReply/} + ${message.getId()}" method="post">
+        <input type="text" name="reply" value="Введите комментарий"/>
+        <button type="submit" class="btn btn-success btn-lg btn-block">Ответить на отзыв</button>
+    </form>
+</div>
 </body>
 </html>

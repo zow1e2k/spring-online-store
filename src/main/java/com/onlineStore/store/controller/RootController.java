@@ -25,7 +25,16 @@ public class RootController {
     }
 
     @GetMapping("/accessDenied")
-    public String accessDenied() {
+    public String accessDenied(@AuthenticationPrincipal User user, Model model) {
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
         return "accessDenied";
     }
 
