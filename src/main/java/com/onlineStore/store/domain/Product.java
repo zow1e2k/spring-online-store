@@ -8,17 +8,24 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String tag;
-    private String carModel;
+    private String brandName;
+    private String name;
     private String text;
+    private int difficulty;
     private float price;
+
+    //private Difficulty difficulty
+    //private Box box
+    @OneToOne
+    private Producer producer;
 
     private String filename;
 
     public Product() { }
 
-    public Product(String tag, String carModel, String text, float price) {
+    public Product(String tag, String brandName, String text, float price) {
         this.tag = tag;
-        this.carModel = carModel;
+        this.brandName = brandName;
         this.text = text;
         this.price = price;
     }
@@ -31,12 +38,12 @@ public class Product {
         this.price = price;
     }
 
-    public String getCarModel() {
-        return carModel;
+    public String getBrandName() {
+        return brandName;
     }
 
-    public void setCarModel(String carModel) {
-        this.carModel = carModel;
+    public void setBrandName(String carModel) {
+        this.brandName = carModel;
     }
 
     public void setText(String text) {

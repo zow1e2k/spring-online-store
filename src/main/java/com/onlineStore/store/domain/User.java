@@ -2,10 +2,8 @@ package com.onlineStore.store.domain;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-
 import javax.persistence.*;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -16,22 +14,26 @@ public class User implements UserDetails {
     private Long id;
     private String username;
     private String password;
+    private String BCWalletID;
+    private String recoveryCode;
     private boolean online;
+    private int purchases;
+    private float bonus;
 
     @OneToOne
-    private Basket basket;
+    private Cart cart;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "user_role", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    public Basket getBasket() {
-        return basket;
+    public Cart getCart() {
+        return cart;
     }
 
-    public void setBasket(Basket basket) {
-        this.basket = basket;
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public Long getId() {
@@ -89,6 +91,38 @@ public class User implements UserDetails {
 
     public void setOnline(boolean online) {
         this.online = online;
+    }
+
+    public void setBCWalletID(String BCWalletID) {
+        this.BCWalletID = BCWalletID;
+    }
+
+    public String getBCWalletID() {
+        return this.BCWalletID;
+    }
+
+    public void setRecoveryCode(String recoveryCode) {
+        this.recoveryCode = recoveryCode;
+    }
+
+    public String getRecoveryCode() {
+        return this.recoveryCode;
+    }
+
+    public void setPurchases(int purchases) {
+        this.purchases = purchases;
+    }
+
+    public int getPurchases() {
+        return this.purchases;
+    }
+
+    public void setBonus(float bonus) {
+        this.bonus = bonus;
+    }
+
+    public float getBonus() {
+        return this.bonus;
     }
 
     public Set<Role> getRoles() {

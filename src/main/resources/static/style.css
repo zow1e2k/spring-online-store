@@ -1,11 +1,5 @@
 body {
     color: #FF4500;
-    background-image: url('staticImages/background.jpg');
-}
-.container {
-    color: #000000;
-    border: 4mm ridge rgba(55, 55, 55, .6);
-    background-color: #D5D5D5;
 }
 nav {
     border: solid #000000;

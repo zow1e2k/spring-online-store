@@ -3,32 +3,32 @@ package com.onlineStore.store.domain;
 import javax.persistence.*;
 
 @Entity
-public class ProductsBasket {
+public class ProductsCart {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pb_product_id")
+    @JoinColumn(name = "pc_product_id")
     private Product product;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "pb_basket_id")
-    private Basket basket;
+    @JoinColumn(name = "pc_cart_id")
+    private Cart cart;
 
-    public ProductsBasket() { }
+    public ProductsCart() { }
 
-    public ProductsBasket(Product product, Basket basket) {
+    public ProductsCart(Product product, Cart cart) {
         this.product = product;
-        this.basket = basket;
+        this.cart = cart;
     }
 
-    public Basket getBasket() {
-        return basket;
+    public Cart getCart() {
+        return cart;
     }
 
-    public void setBasket(Basket basket) {
-        this.basket = basket;
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 
     public void setId(Integer id) {

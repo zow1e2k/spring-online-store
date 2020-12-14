@@ -1,9 +1,9 @@
 package com.onlineStore.store.controller;
 
-import com.onlineStore.store.domain.Basket;
+import com.onlineStore.store.domain.Cart;
 import com.onlineStore.store.domain.Role;
 import com.onlineStore.store.domain.User;
-import com.onlineStore.store.repos.BasketRepo;
+import com.onlineStore.store.repos.CartRepo;
 import com.onlineStore.store.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -20,7 +20,7 @@ public class RegistrationController {
     private UserRepo userRepo;
 
     @Autowired
-    private BasketRepo basketRepo;
+    private CartRepo cartRepo;
 
     @GetMapping("/registration")
     public String registration() {
@@ -42,9 +42,9 @@ public class RegistrationController {
         user.setPassword(hashedPassword);
         user.setOnline(true);
         user.setRoles(Collections.singleton(Role.USER));
-        Basket basket = new Basket();
-        user.setBasket(basket);
-        basketRepo.save(basket);
+        Cart cart = new Cart();
+        user.setCart(cart);
+        cartRepo.save(cart);
         userRepo.save(user);
 
         if (user != null) {

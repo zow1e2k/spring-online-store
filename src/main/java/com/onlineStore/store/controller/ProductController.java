@@ -30,7 +30,7 @@ public class ProductController {
     private ReplyMessageRepo replyMessageRepo;
 
     @Autowired
-    private ProductsBasketRepo productsBasketRepo;
+    private ProductsCartRepo productsCartRepo;
 
     @Autowired
     private UserRepo userRepo;
@@ -239,9 +239,9 @@ public class ProductController {
             Model model
     ) {
         Integer id = Integer.parseInt(product);
-        ProductsBasket prodBasket = new ProductsBasket(productRepo.findByIntegerId(id), user.getBasket());
+        ProductsCart prodCart = new ProductsCart(productRepo.findByIntegerId(id), user.getCart());
 
-        productsBasketRepo.save(prodBasket);
+        productsCartRepo.save(prodCart);
 
         Iterable<Product> products = productRepo.findAll();
         model.addAttribute("products", products);
@@ -262,12 +262,12 @@ public class ProductController {
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Basket basket = user.getBasket();
-        Iterable<ProductsBasket> productsBasket = productsBasketRepo.findPBByBasketId(basket.getId());
+        Cart basket = user.getCart();
+        Iterable<ProductsCart> productsCart = productsCartRepo.findPCByCartId(basket.getId());
         List<Product> products = new ArrayList<>();
 
-        for (ProductsBasket pb : productsBasket) {
-            products.add(pb.getProduct());
+        for (ProductsCart pc : productsCart) {
+            products.add(pc.getProduct());
         }
 
         model.addAttribute("products", products);
@@ -290,14 +290,14 @@ public class ProductController {
             Model model
     ) {
         Integer productId = Integer.parseInt(product);
-        Long basketId = user.getBasket().getId();
-        productsBasketRepo.deleteProductFromBasket(basketId, productId);
+        Long cartId = user.getCart().getId();
+        productsCartRepo.deleteProductFromCart(cartId, productId);
 
-        Iterable<ProductsBasket> productsBasket = productsBasketRepo.findPBByBasketId(basketId);
+        Iterable<ProductsCart> productsCart = productsCartRepo.findPCByCartId(cartId);
         List<Product> products = new ArrayList<>();
 
-        for (ProductsBasket pb : productsBasket) {
-            products.add(pb.getProduct());
+        for (ProductsCart pc : productsCart) {
+            products.add(pc.getProduct());
         }
 
         model.addAttribute("products", products);
