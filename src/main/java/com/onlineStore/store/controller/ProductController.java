@@ -42,10 +42,10 @@ public class ProductController {
     public String products(Model model, @AuthenticationPrincipal User user) {
         Iterable<Product> prod = productRepo.findAll();
         Iterable<String> tags = productRepo.findAllTags();
-        Iterable<String> carModels = productRepo.findAllCarModels();
+        Iterable<String> brandNames = productRepo.findAllBrandNames();
 
         model.addAttribute("tags", tags);
-        model.addAttribute("carModels", carModels);
+        model.addAttribute("brandNames", brandNames);
         model.addAttribute("products", prod);
 
         if (user != null) {
@@ -79,8 +79,8 @@ public class ProductController {
                     String text,
             @RequestParam(name="tag", required=true, defaultValue="")
                     String tag,
-            @RequestParam(name="carModel", required=true, defaultValue="")
-                    String carModel,
+            @RequestParam(name="brandName", required=true, defaultValue="")
+                    String brandName,
             @RequestParam("file")
                     MultipartFile file,
             @RequestParam(name="price", required=true, defaultValue="")
@@ -89,7 +89,7 @@ public class ProductController {
             Model model
     ) throws IOException {
 
-        Product product = new Product(tag, carModel, text, price);
+        Product product = new Product(tag, brandName, text, price);
         if (file != null && file.getSize() < 60000 && file.getSize() > 0) {
             File dir = new File(uploadPath);
 
@@ -123,18 +123,18 @@ public class ProductController {
     public String filter(
             @RequestParam(name="filterByTag", required=true, defaultValue="")
                     String tag,
-            @RequestParam(name="filterByCarModel", required=true, defaultValue="")
-                    String carModel,
+            @RequestParam(name="filterByBrandName", required=true, defaultValue="")
+                    String brandName,
             @AuthenticationPrincipal User user,
             Model model)
     {
         Iterable<Product> products;
         String text = null;
 
-        if (tag != null && !tag.isEmpty() && (carModel == null || carModel.isEmpty())) {
+        if (tag != null && !tag.isEmpty() && (brandName == null || brandName.isEmpty())) {
             products = productRepo.findByTag(tag);
-        } else if (tag != null && !tag.isEmpty() && carModel != null && !carModel.isEmpty()) {
-            products = productRepo.findByTagAndCarModel(tag, carModel);
+        } else if (tag != null && !tag.isEmpty() && brandName != null && !brandName.isEmpty()) {
+            products = productRepo.findByTagAndBrandName(tag, brandName);
         } else {
             products = productRepo.findAll();
         }
@@ -147,9 +147,9 @@ public class ProductController {
         }
 
         Iterable<String> tags = productRepo.findAllTags();
-        Iterable<String> carModels = productRepo.findAllCarModels();
+        Iterable<String> brandNames = productRepo.findAllBrandNames();
         model.addAttribute("tags", tags);
-        model.addAttribute("carModels", carModels);
+        model.addAttribute("brandNames", brandNames);
         model.addAttribute("text", text);
         model.addAttribute("products", products);
 
@@ -232,8 +232,8 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @PostMapping("/basket/{product}")
-    public String addToBasket(
+    @PostMapping("/cart/{product}")
+    public String addToCart(
             @PathVariable String product,
             @AuthenticationPrincipal User user,
             Model model
@@ -257,13 +257,13 @@ public class ProductController {
         return "redirect:/products";
     }
 
-    @GetMapping("/basket")
-    public String basket(
+    @GetMapping("/cart")
+    public String cart(
             @AuthenticationPrincipal User user,
             Model model
     ) {
-        Cart basket = user.getCart();
-        Iterable<ProductsCart> productsCart = productsCartRepo.findPCByCartId(basket.getId());
+        Cart cart = user.getCart();
+        Iterable<ProductsCart> productsCart = productsCartRepo.findPCByCartId(cart.getId());
         List<Product> products = new ArrayList<>();
 
         for (ProductsCart pc : productsCart) {
@@ -280,7 +280,7 @@ public class ProductController {
             }
         }
 
-        return "basket";
+        return "cart";
     }
 
     @PostMapping("/buy/{product}")
@@ -310,7 +310,7 @@ public class ProductController {
             }
         }
 
-        return "redirect:/products/basket";
+        return "redirect:/products/cart";
     }
 
 

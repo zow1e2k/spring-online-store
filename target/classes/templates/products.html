@@ -56,7 +56,7 @@
 
                 <div>
                     <li class="nav-item">
-                        <form th:action="@{/products/basket}" th:if="${username}" method="get">
+                        <form th:action="@{/products/cart}" th:if="${username}" method="get">
                             <input class="nav-link ml-2" type="submit" value="Корзина"/>
                         </form>
                     </li>
@@ -80,10 +80,10 @@
                         <option th:text="${tag}"></option>
                     </div>
                 </select>
-                <select name="filterByCarModel" class="mdb-select md-form">
-                    <option value="" disabled="selected">Выберите модель авто</option>
-                    <div th:each="carModel : ${carModels}" >
-                        <option th:text="${carModel}"></option>
+                <select name="filterByBrandName" class="mdb-select md-form">
+                    <option value="" disabled="selected">Выберите бренд</option>
+                    <div th:each="brandName : ${brandNames}" >
+                        <option th:text="${brandName}"></option>
                     </div>
                 </select>
                 <button type="submit" class="btn btn-dark btn-lg btn-block mt-2 mb-2">Найти</button>
@@ -97,7 +97,7 @@
 
                     <form  th:action="@{/products/} + ${prod.getId()}" method="post">
                         <h5 class="card-header" th:text="${prod.tag}"></h5>
-                        <h5 class="card-title" th:text="${prod.carModel}"></h5>
+                        <h5 class="card-title" th:text="${prod.brandName}"></h5>
                         <div class="card-text" th:text="${prod.text}"></div>
                         <button type="submit" class="btn btn-primary btn-lg btn-block">Отзывы о товаре</button>
                     </form>
@@ -105,7 +105,7 @@
                 <div class="card-footer">
                     <h1 th:text="${prod.price}"></h1>
 
-                    <form th:action="@{/products/basket/} + ${prod.getId()}" method="post">
+                    <form th:action="@{/products/cart/} + ${prod.getId()}" method="post">
                         <button type="submit" th:if="${username}" class="btn btn-success btn-lg btn-block">В корзину</button>
                     </form>
                 </div>

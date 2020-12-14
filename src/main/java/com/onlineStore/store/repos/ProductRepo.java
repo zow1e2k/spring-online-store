@@ -15,9 +15,9 @@ public interface ProductRepo extends CrudRepository <Product, Long> {
     @Query(value = "SELECT DISTINCT p.tag FROM product p;", nativeQuery = true)
     List<String> findAllTags();
 
-    @Query(value = "SELECT DISTINCT p.car_model FROM product p;", nativeQuery = true)
-    List<String> findAllCarModels();
+    @Query(value = "SELECT DISTINCT p.brand_name FROM product p;", nativeQuery = true)
+    List<String> findAllBrandNames();
 
-    @Query(value = "SELECT * FROM product p WHERE p.tag = ?1 AND p.car_model = ?2", nativeQuery = true)
-    List<Product> findByTagAndCarModel(String tag, String carModel);
+    @Query(value = "SELECT * FROM product p WHERE p.tag = ?1 AND p.brand_name = ?2", nativeQuery = true)
+    List<Product> findByTagAndBrandName(String tag, String brandName);
 }

@@ -1,6 +1,5 @@
 package com.onlineStore.store.domain;
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 public class Product {
@@ -14,8 +13,9 @@ public class Product {
     private int difficulty;
     private float price;
 
-    //private Difficulty difficulty
-    //private Box box
+    @OneToOne
+    private Box box;
+
     @OneToOne
     private Producer producer;
 
@@ -42,8 +42,8 @@ public class Product {
         return brandName;
     }
 
-    public void setBrandName(String carModel) {
-        this.brandName = carModel;
+    public void setBrandName(String brandName) {
+        this.brandName = brandName;
     }
 
     public void setText(String text) {

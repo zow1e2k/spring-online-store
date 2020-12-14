@@ -56,7 +56,7 @@
 
             <div>
                 <li class="nav-item">
-                    <form th:action="@{/products/basket}" th:if="${username}" method="get">
+                    <form th:action="@{/products/cart}" th:if="${username}" method="get">
                         <input class="nav-link ml-2" type="submit" value="Корзина"/>
                     </form>
                 </li>
@@ -72,7 +72,7 @@
                 <img th:if="${prod.filename}" th:src="@{/imgs/} + ${prod.filename}" class="card-img-top rounded-circle"/>
 
                 <form>
-                    <h5 class="card-title" th:text="${prod.carModel}"></h5>
+                    <h5 class="card-title" th:text="${prod.brandName}"></h5>
                     <h5 class="card-title" th:text="${prod.tag}"></h5>
                     <div class="card-text" th:text="${prod.text}"></div>
                 </form>
