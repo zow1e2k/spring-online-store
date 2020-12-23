@@ -103,7 +103,7 @@
                     </form>
                 </div>
                 <div class="card-footer">
-                    <h1 th:text="${prod.price}"></h1>
+                    <h1 th:text="${prod.getPrice()}"></h1>
 
                     <form th:action="@{/products/cart/} + ${prod.getId()}" method="post">
                         <button type="submit" th:if="${username}" class="btn btn-success btn-lg btn-block">В корзину</button>

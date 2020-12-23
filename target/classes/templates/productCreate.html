@@ -64,15 +64,51 @@
         </ul>
     </div>
 </nav>
-<div class="container mt-5">
-    <form th:action="@{/products/create}" method="post" enctype="multipart/form-data">
-        <input type="text" name="brandName" />
-        <input type="text" name="tag" />
-        <input type="text" name="text" />
-        <input type="text" name="price" />
-        <input type="file" name="file"/>
+<form th:action="@{/products/create}" method="post" enctype="multipart/form-data" class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Название бренда</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="basic-addon3" name="brandName"/>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Тэг</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="basic-addon3" name="tag"/>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Описание</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="basic-addon3" name="text"/>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Цена</span>
+                    <span class="input-group-text">BitCoin</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="basic-addon3" name="price"/>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Изображение товара</span>
+                </div>
+                <div class="custom-file">
+                    <input class="custom-file-input" type="file" name="file" id="inputGroupFile01"/>
+                    <label class="custom-file-label" for="inputGroupFile01">Выбрать файл</label>
+                </div>
+            </div>
+
+        </div>
         <button type="submit" class="btn btn-success btn-lg btn-block">Добавить</button>
-    </form>
-</div>
+    </div>
+</form>
 </body>
 </html>

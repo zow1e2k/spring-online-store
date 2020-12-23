@@ -11,7 +11,7 @@ public class Product {
     private String name;
     private String text;
     private int difficulty;
-    private float price;
+    private double price;
 
     @OneToOne
     private Box box;
@@ -23,18 +23,18 @@ public class Product {
 
     public Product() { }
 
-    public Product(String tag, String brandName, String text, float price) {
+    public Product(String tag, String brandName, String text, double price) {
         this.tag = tag;
         this.brandName = brandName;
         this.text = text;
         this.price = price;
     }
 
-    public float getPrice() {
-        return price;
+    public double getPrice() {
+        return this.price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 
