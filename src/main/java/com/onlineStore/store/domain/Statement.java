@@ -49,8 +49,28 @@ public class Statement {
         return this.isAgreed;
     }
 
+    public void changeAgreed() {
+        this.isAgreed = !this.isAgreed;
+    }
+
     public Product getProduct() {
         return this.product;
+    }
+
+    public void setModerator(User moderator) {
+        this.moderator = moderator;
+    }
+
+    public User getModerator() {
+        return this.moderator;
+    }
+
+    public boolean hasModerator() {
+        if (this.moderator != null) {
+            return true;
+        }
+
+        return false;
     }
 
 }

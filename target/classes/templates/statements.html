@@ -98,7 +98,7 @@
                 <h5 class="card-title" th:text="${statement.getProduct().getBrandName()}"></h5>
                 <div class="card-text" th:text="${statement.getProduct().getText()}"></div>
                 <div class="card-text" th:if="${statement.hasModerator() == true}">
-                    <h5>Проверил:</h5>
+                    <span>Проверил:</span>
                     <div th:text="${statement.getModerator().getUsername()}"></div>
                 </div>
 
