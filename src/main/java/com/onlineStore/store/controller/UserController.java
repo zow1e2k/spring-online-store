@@ -1,7 +1,8 @@
 package com.onlineStore.store.controller;
 
-import com.onlineStore.store.domain.Role;
-import com.onlineStore.store.domain.User;
+import com.onlineStore.store.domain.*;
+import com.onlineStore.store.repos.AddressDescRepo;
+import com.onlineStore.store.repos.ProducerRepo;
 import com.onlineStore.store.repos.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,9 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Controller
@@ -20,6 +19,12 @@ import java.util.stream.Collectors;
 public class UserController {
     @Autowired
     private UserRepo userRepo;
+
+    @Autowired
+    private ProducerRepo producerRepo;
+
+    @Autowired
+    private AddressDescRepo addressDescRepo;
 
     @GetMapping("/{user}")
     public String profile(
@@ -85,7 +90,11 @@ public class UserController {
                 user.getRoles().add(Role.valueOf(key));
             }
         }
+        
         userRepo.save(user);
+        //Producer producer = new Producer(user);
+        //producer.setRating(0.0f);
+        //producerRepo.save(producer);
 
         model.addAttribute("username", user.getUsername());
         model.addAttribute("admin", true);

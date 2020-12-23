@@ -12,6 +12,7 @@ public class AddressValue {
     private AddressDesc addressDesc;
 
     private float value;
+    private String valueString;
     private String measure;
 
     public AddressValue() { }

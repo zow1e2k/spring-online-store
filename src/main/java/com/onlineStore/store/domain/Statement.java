@@ -1,6 +1,8 @@
 package com.onlineStore.store.domain;
 
 import javax.persistence.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @Entity
 public class Statement {
@@ -9,7 +11,7 @@ public class Statement {
     private Long id;
 
     @OneToOne
-    private Producer producer;
+    private User producer;
 
     @OneToOne
     private Product product;
@@ -18,9 +20,17 @@ public class Statement {
     private User moderator;
 
     private boolean isAgreed;
-    private String date;
+    private Date date;
 
-    public Statement() { }
+    public Statement() {
+    }
+
+    public Statement(User producer, Product product) {
+        this.producer = producer;
+        this.product = product;
+        this.isAgreed = false;
+        this.date = new Date(System.currentTimeMillis());
+    }
 
     public void setId(Long id) {
         this.id = id;
@@ -28,6 +38,19 @@ public class Statement {
 
     public Long getId() {
         return id;
+    }
+
+    public String getDate() {
+        SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd 'at' HH:mm:ss z");
+        return formatter.format(date);
+    }
+
+    public boolean isAgreed() {
+        return this.isAgreed;
+    }
+
+    public Product getProduct() {
+        return this.product;
     }
 
 }

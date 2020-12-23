@@ -1,5 +1,4 @@
 package com.onlineStore.store.domain;
-
 import javax.persistence.*;
 
 @Entity
@@ -21,5 +20,17 @@ public class AddressDesc {
 
     public Long getId() {
         return id;
+    }
+
+    public void setAddress() {
+        this.address = address;
+    }
+
+    public Address getAddress() {
+        return this.address;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }

@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.security.RolesAllowed;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -35,14 +36,25 @@ public class ProductController {
     @Autowired
     private UserRepo userRepo;
 
+    @Autowired
+    private StatementRepo statementRepo;
+
     @Value("${upload.path}")
     private String uploadPath;
 
     @GetMapping("")
     public String products(Model model, @AuthenticationPrincipal User user) {
-        Iterable<Product> prod = productRepo.findAll();
+        //Iterable<Product> prod = productRepo.findAll();
+        List<Product> prod = new ArrayList<>();
+        Iterable<Statement> statements = statementRepo.findAll();
         Iterable<String> tags = productRepo.findAllTags();
         Iterable<String> brandNames = productRepo.findAllBrandNames();
+
+        for (Statement statement : statements) {
+            if (statement.isAgreed()) {
+                prod.add(statement.getProduct());
+            }
+        }
 
         model.addAttribute("tags", tags);
         model.addAttribute("brandNames", brandNames);
@@ -59,7 +71,8 @@ public class ProductController {
     }
 
     @GetMapping("/create")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PRODUCER')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     public String create(@AuthenticationPrincipal User user, Model model) {
 
         if (user != null) {
@@ -73,7 +86,7 @@ public class ProductController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PRODUCER')")
     public String add(
             @RequestParam(name="text", required=true, defaultValue="")
                     String text,
@@ -107,6 +120,9 @@ public class ProductController {
         }
 
         productRepo.save(product);
+        Statement statement = new Statement(user, product);
+        statementRepo.save(statement);
+
 
         if (user != null) {
             model.addAttribute("username", user.getUsername());
