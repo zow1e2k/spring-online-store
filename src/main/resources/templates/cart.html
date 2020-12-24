@@ -61,6 +61,14 @@
                     </form>
                 </li>
             </div>
+
+            <div>
+                <li class="nav-item" th:if="${admin}">
+                    <form th:action="@{/statements/}" method="get">
+                        <input class="nav-link ml-2" type="submit" value="Заявления"/>
+                    </form>
+                </li>
+            </div>
         </ul>
     </div>
 </nav>
@@ -69,16 +77,14 @@
     <div class="card-group w-25 p-1" th:each="prod : ${products}" align="center">
         <div class="card" align="center">
             <div class="card-body" align="center">
-                <img th:if="${prod.filename}" th:src="@{/imgs/} + ${prod.filename}" class="card-img-top rounded-circle"/>
+                <img th:if="${prod != null}" th:src="@{/imgs/} + ${prod.getFilename()}" class="card-img-top rounded-circle"/>
 
-                <form>
-                    <h5 class="card-title" th:text="${prod.brandName}"></h5>
-                    <h5 class="card-title" th:text="${prod.tag}"></h5>
-                    <div class="card-text" th:text="${prod.text}"></div>
-                </form>
+                <h5 class="card-title" th:text="${prod.getBrandName()}"></h5>
+                <h5 class="card-title" th:text="${prod.getTag()}"></h5>
+                <div class="card-text" th:text="${prod.getText()}"></div>
             </div>
             <div class="card-footer">
-                <h1 th:text="${prod.price}"></h1>
+                <h1 th:text="${prod.getPrice()}"></h1>
 
                 <form  th:action="@{/products/buy/} + ${prod.getId()}" method="post">
                     <button type="submit" th:if="${username}" class="btn btn-success btn-lg btn-block">Купить</button>

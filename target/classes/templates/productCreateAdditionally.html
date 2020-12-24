@@ -72,8 +72,40 @@
         </ul>
     </div>
 </nav>
-<div class="container mt-5">
-    <h5 class="ml-5 mr-5" align="center">Доступ запрещен</h5>
-</div>
+<form th:action="@{/products/create}" method="post" enctype="multipart/form-data" class="container mt-5">
+    <div class="card">
+        <div class="card-body">
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Название аттрибута</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="basic-addon3" name="attributeName"/>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Единица измерения</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="basic-addon3" name="attributeMeasure"/>
+            </div>
+
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <span class="input-group-text">Значение</span>
+                </div>
+                <input type="text" class="form-control" aria-describedby="basic-addon3" name="attributeValue"/>
+            </div>
+
+            <div th:if="${productID}" th:style="'display:none'">
+                <input type="text" th:value = "${productID}" class="form-control" aria-describedby="basic-addon3" name="productID"/>
+            </div>
+
+            <button th:if="${productID}" type="submit" name="action" value="additionWith" class="btn btn-success btn-lg btn-block">Добавить аттрибут</button>
+            <button th:if="${productID == null}" type="submit" name="action" value="addition" class="btn btn-success btn-lg btn-block">Дополнительно</button>
+
+        </div>
+        <button type="submit" name="action" value="create" class="btn btn-primary btn-lg btn-block">Отправить заявление</button>
+    </div>
+</form>
 </body>
 </html>

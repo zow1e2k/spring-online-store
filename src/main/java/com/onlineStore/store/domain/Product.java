@@ -71,7 +71,7 @@ public class Product {
     }
 
     public String getFilename() {
-        return filename;
+        return this.filename;
     }
 
     public void setFilename(String filename) {

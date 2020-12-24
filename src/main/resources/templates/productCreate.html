@@ -61,6 +61,14 @@
                     </form>
                 </li>
             </div>
+
+            <div>
+                <li class="nav-item" th:if="${admin}">
+                    <form th:action="@{/statements/}" method="get">
+                        <input class="nav-link ml-2" type="submit" value="Заявления"/>
+                    </form>
+                </li>
+            </div>
         </ul>
     </div>
 </nav>
@@ -106,8 +114,10 @@
                 </div>
             </div>
 
+            <button th:if="${productID}" type="submit" name="action" value="additionWith" class="btn btn-success btn-lg btn-block">Дополнительно</button>
+            <button th:if="${productID == null}" type="submit" name="action" value="addition" class="btn btn-success btn-lg btn-block">Дополнительно</button>
         </div>
-        <button type="submit" class="btn btn-success btn-lg btn-block">Добавить</button>
+        <button type="submit" name="action" value="create" class="btn btn-primary btn-lg btn-block">Отправить заявление</button>
     </div>
 </form>
 </body>

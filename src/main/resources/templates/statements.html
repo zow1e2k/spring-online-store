@@ -61,10 +61,19 @@
                     </form>
                 </li>
             </div>
+
             <div>
                 <li class="nav-item" th:if="${admin}">
                     <form th:action="@{/products/create}" method="get">
                         <input class="nav-link ml-2" type="submit" value="Добавить товар"/>
+                    </form>
+                </li>
+            </div>
+
+            <div>
+                <li class="nav-item" th:if="${admin}">
+                    <form th:action="@{/statements/}" method="get">
+                        <input class="nav-link ml-2" type="submit" value="Заявления"/>
                     </form>
                 </li>
             </div>
@@ -98,8 +107,9 @@
                 <h5 class="card-title" th:text="${statement.getProduct().getBrandName()}"></h5>
                 <div class="card-text" th:text="${statement.getProduct().getText()}"></div>
                 <div class="card-text" th:if="${statement.hasModerator() == true}">
-                    <h5>Проверил:</h5>
-                    <div th:text="${statement.getModerator().getUsername()}"></div>
+                    <h5>Проверил:
+                        <div th:text="${statement.getModerator().getUsername()}"></div>
+                    </h5>
                 </div>
 
                 <!--<button type="submit" class="btn btn-primary btn-lg btn-block">Отзывы о товаре</button>-->

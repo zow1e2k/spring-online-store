@@ -39,6 +39,12 @@ public class ProductController {
     @Autowired
     private StatementRepo statementRepo;
 
+    @Autowired
+    private ProductDescRepo productDescRepo;
+
+    @Autowired
+    private ProductValueRepo productValueRepo;
+
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -85,41 +91,52 @@ public class ProductController {
         return "productCreate";
     }
 
-    @PostMapping("/create")
+    @RequestMapping(value="/create", method=RequestMethod.POST, params="action=create")
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PRODUCER')")
     public String add(
-            @RequestParam(name="text", required=true, defaultValue="")
+            @RequestParam(name="text", required=false)
                     String text,
-            @RequestParam(name="tag", required=true, defaultValue="")
+            @RequestParam(name="tag", required=false)
                     String tag,
-            @RequestParam(name="brandName", required=true, defaultValue="")
+            @RequestParam(name="brandName", required=false)
                     String brandName,
-            @RequestParam("file")
+            @RequestParam(name="file", required = false)
                     MultipartFile file,
-            @RequestParam(name="price", required=true, defaultValue="")
-                    float price,
+            @RequestParam(name="price", required=false)
+                    String price,
+            @RequestParam(name="productID", required = false)
+                    String productID,
             @AuthenticationPrincipal User user,
             Model model
     ) throws IOException {
+        Product product = null;
 
-        Product product = new Product(tag, brandName, text, price);
-        if (file != null && file.getSize() < 60000 && file.getSize() > 0) {
-            File dir = new File(uploadPath);
-
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-
-            String UUIDFile = UUID.randomUUID().toString();
-            String resultFileName = UUIDFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/imgs/" + resultFileName));
-
-            product.setFilename(resultFileName);
-
+        if (productID != null) {
+            product = productRepo.findByIntegerId(Integer.parseInt(productID));
         }
 
-        productRepo.save(product);
+        if (product == null) {
+            product = new Product(tag, brandName, text, Double.parseDouble(price));
+
+            if (file != null && file.getSize() < 60000 && file.getSize() > 0) {
+                File dir = new File(uploadPath);
+
+                if (!dir.exists()) {
+                    dir.mkdir();
+                }
+
+                String UUIDFile = UUID.randomUUID().toString();
+                String resultFileName = UUIDFile + "." + file.getOriginalFilename();
+
+                file.transferTo(new File(uploadPath + "/imgs/" + resultFileName));
+
+                product.setFilename(resultFileName);
+
+            }
+
+            productRepo.save(product);
+        }
+
         Statement statement = new Statement(user, product);
         statementRepo.save(statement);
 
@@ -133,6 +150,108 @@ public class ProductController {
         }
 
         return "redirect:/products";
+    }
+
+    @RequestMapping(value="/create", method=RequestMethod.POST, params="action=addition")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PRODUCER')")
+    public String additionally(
+            @RequestParam(name="text", required=true)
+                    String text,
+            @RequestParam(name="tag", required=true)
+                    String tag,
+            @RequestParam(name="brandName", required=true)
+                    String brandName,
+            @RequestParam(name="file", required = true)
+                    MultipartFile file,
+            @RequestParam(name="price", required=true)
+                    String price,
+            @AuthenticationPrincipal User user,
+            Model model
+    ) throws IOException {
+        Product prod = new Product(tag, brandName, text, Double.parseDouble(price));
+
+        if (file != null && file.getSize() < 60000 && file.getSize() > 0) {
+            File dir = new File(uploadPath);
+
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+
+            String UUIDFile = UUID.randomUUID().toString();
+            String resultFileName = UUIDFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/imgs/" + resultFileName));
+
+            prod.setFilename(resultFileName);
+        }
+
+        productRepo.save(prod);
+        model.addAttribute("productID", prod.getId().toString());
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
+        return "productCreateAdditionally";
+    }
+
+    @RequestMapping(value="/create", method=RequestMethod.POST, params="action=additionWith")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('PRODUCER')")
+    public String additionallyWith(
+            @RequestParam(name="attributeName", required = true)
+                    String attributeName,
+            @RequestParam(name="attributeMeasure", required = true)
+                    String attributeMeasure,
+            @RequestParam(name="attributeValue", required = true)
+                    String attributeValue,
+            @RequestParam(name="productID", required = true)
+                    String productID,
+            @AuthenticationPrincipal User user,
+            Model model
+    ) throws IOException {
+        Product prod = productRepo.findByIntegerId(Integer.parseInt(productID));
+
+        model.addAttribute("productID", prod.getId().toString());
+        ProductDesc productDesc = null;
+        ProductValue productValue = null;
+
+        if (!attributeName.equals("NULL")) {
+            productDesc = productDescRepo.findProductDescByDescName(attributeName);
+
+            if (productDesc == null) {
+                productDesc = new ProductDesc(prod);
+            }
+
+            productDesc.setName(attributeName);
+            productDescRepo.save(productDesc);
+        }
+
+        if (!attributeMeasure.equals("NULL") && productDesc != null && !attributeValue.equals("NULL")) {
+            productValue = productValueRepo.findProductValueByProductDescId(productDesc.getId());
+
+            if (productValue == null) {
+                productValue = new ProductValue(productDesc, attributeMeasure, attributeValue);
+            } else {
+                productValue.setMeasure(attributeMeasure);
+                productValue.setValueStr(attributeValue);
+            }
+
+            productValueRepo.save(productValue);
+        }
+
+        if (user != null) {
+            model.addAttribute("username", user.getUsername());
+
+            if (user.getRoles().contains(Role.ADMIN)) {
+                model.addAttribute("admin", true);
+            }
+        }
+
+        return "productCreateAdditionally";
     }
 
     @PostMapping("/filter")
@@ -283,9 +402,13 @@ public class ProductController {
         List<Product> products = new ArrayList<>();
 
         for (ProductsCart pc : productsCart) {
-            products.add(pc.getProduct());
+            Product product = pc.getProduct();
+            if (product != null) {
+                products.add(pc.getProduct());
+            }
         }
 
+        System.out.println(products);
         model.addAttribute("products", products);
 
         if (user != null) {

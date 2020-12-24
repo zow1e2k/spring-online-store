@@ -61,10 +61,19 @@
                         </form>
                     </li>
                 </div>
+
                 <div>
                     <li class="nav-item" th:if="${admin}">
                         <form th:action="@{/products/create}" method="get">
                             <input class="nav-link ml-2" type="submit" value="Добавить товар"/>
+                        </form>
+                    </li>
+                </div>
+
+                <div>
+                    <li class="nav-item" th:if="${admin}">
+                        <form th:action="@{/statements/}" method="get">
+                            <input class="nav-link ml-2" type="submit" value="Заявления"/>
                         </form>
                     </li>
                 </div>
