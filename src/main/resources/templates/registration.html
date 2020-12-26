@@ -68,6 +68,14 @@
                         </form>
                     </li>
                 </div>
+
+                <div>
+                    <li class="nav-item" th:if="${admin}">
+                        <form th:action="@{/profile/editor/}" method="get">
+                            <input class="nav-link ml-2" type="submit" value="Редактор пользователей"/>
+                        </form>
+                    </li>
+                </div>
             </ul>
         </div>
     </nav>
