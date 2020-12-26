@@ -52,6 +52,10 @@ public class RegistrationController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 

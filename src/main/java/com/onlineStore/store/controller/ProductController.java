@@ -71,6 +71,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
         return "products";
@@ -86,6 +90,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
         return "productCreate";
@@ -146,6 +154,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -193,6 +205,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -248,6 +264,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -293,6 +313,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -314,6 +338,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
         return "productCreateMessage";
@@ -334,6 +362,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -361,6 +393,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -386,6 +422,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -416,6 +456,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -446,6 +490,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -475,6 +523,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -504,6 +556,10 @@ public class ProductController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 

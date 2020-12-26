@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="https://www.thymeleaf.org"
       xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity3">
 <head>
+    <title>Авторизация</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" href="../static/style.css">
@@ -48,7 +49,7 @@
             <div>
                 <li class="nav-item">
                     <form th:action="@{/products}" method="get">
-                        <input class="nav-link ml-2" type="submit" value="Товары"/>
+                        <input class="nav-link ml-2" type="submit" value="Каталог"/>
                     </form>
                 </li>
             </div>
@@ -70,12 +71,21 @@
             </div>
 
             <div>
+                <li class="nav-item" th:if="${moderator}">
+                    <form th:action="@{/statements/}" method="get">
+                        <input class="nav-link ml-2" type="submit" value="Заявления"/>
+                    </form>
+                </li>
+            </div>
+
+            <div>
                 <li class="nav-item" th:if="${admin}">
                     <form th:action="@{/profile/editor/}" method="get">
                         <input class="nav-link ml-2" type="submit" value="Редактор пользователей"/>
                     </form>
                 </li>
             </div>
+
         </ul>
     </div>
 </nav>

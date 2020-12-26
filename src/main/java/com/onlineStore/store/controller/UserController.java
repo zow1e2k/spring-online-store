@@ -39,6 +39,10 @@ public class UserController {
 
             if (user1.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user1.getRoles().contains(Role.PRODUCER)) {
+                model.addAttribute("producer", true);
+            } else if (user1.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
@@ -54,6 +58,11 @@ public class UserController {
 
         model.addAttribute("username", user.getUsername());
         model.addAttribute("admin", true);
+        if (user.getRoles().contains(Role.PRODUCER)) {
+            model.addAttribute("producer", true);
+        } else if (user.getRoles().contains(Role.MODERATOR)) {
+            model.addAttribute("moderator", true);
+        }
         model.addAttribute("users", userRepo.findAll());
         return "users";
     }
@@ -67,6 +76,11 @@ public class UserController {
     ) {
         model.addAttribute("username", user.getUsername());
         model.addAttribute("admin", true);
+        if (user.getRoles().contains(Role.PRODUCER)) {
+            model.addAttribute("producer", true);
+        } else if (user.getRoles().contains(Role.MODERATOR)) {
+            model.addAttribute("moderator", true);
+        }
         model.addAttribute("user", user);
         model.addAttribute("roles", Role.values());
         return "userEdit";
@@ -98,6 +112,11 @@ public class UserController {
 
         model.addAttribute("username", user.getUsername());
         model.addAttribute("admin", true);
+        if (user.getRoles().contains(Role.PRODUCER)) {
+            model.addAttribute("producer", true);
+        } else if (user.getRoles().contains(Role.MODERATOR)) {
+            model.addAttribute("moderator", true);
+        }
 
         return "redirect:/profile/editor";
     }

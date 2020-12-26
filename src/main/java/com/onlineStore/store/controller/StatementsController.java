@@ -27,6 +27,8 @@ public class StatementsController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
         return "statements";
@@ -49,6 +51,8 @@ public class StatementsController {
 
             if (user.getRoles().contains(Role.ADMIN)) {
                 model.addAttribute("admin", true);
+            } else if (user.getRoles().contains(Role.MODERATOR)) {
+                model.addAttribute("moderator", true);
             }
         }
 
